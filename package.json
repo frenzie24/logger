@@ -1,0 +1,18 @@
+{
+  "name": "@frenzie24/logger",
+  "version": "1.0.0",
+  "description": "helps debug cli apps by easily applying text and background colors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Charles Gross",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "logger": "^0.0.1",
+    "package.json": "^2.0.1"
+  },
+  "devDependencies": {}
+}
