@@ -1,6 +1,6 @@
 {
   "name": "@frenzie24/logger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple text and background colors for CLI debugging",
   "main": "logger.js",
   "dependencies": {
