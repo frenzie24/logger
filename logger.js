@@ -116,7 +116,7 @@ class Logger {
     }
 
 
-    welcome = () => {
+    help = () => {
 
         // log is the most robust function logger has and using it in your js is as easy as
         this.log("Hi there! I'm Logger!", 'brightYellow');
@@ -140,6 +140,5 @@ class Logger {
     }
 }
 
-let test = new Logger(); test.welcome();
 
 module.exports = new Logger();
