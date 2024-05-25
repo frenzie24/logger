@@ -44,23 +44,6 @@ function findColor(msg, color) {
 
 //pretty console logs, less typing
 
-const welcome = () => {
-    // it's easy afffff
-
-    // log is the most robust function logger has and using it in your js is as easy as
-    log("Hi there! I'm Logger!", 'yellow', 'bgGreen');
-    // this will print 'Hi There! I'm logger!' with yellow text and a green background
-
-    info('I set info messages to have a grey background and white text!');
-
-    warn('I set warn messages to have a white background and red text!');
-
-    error('I set error messages to have a yellow background and red text!');
-
-    log('I hope I can help you debug CLI someday!', 'green');
-    log('To install, run [npm install colors] in your project and add logger to your file structure.\nHappy logging!', 'yellow', 'bgBlack');
-
-}
 
 const logArray = (msg, color, bgColor) => {
 
@@ -70,7 +53,7 @@ const logArray = (msg, color, bgColor) => {
         if (Array.isArray(c)) {
             if (c.length <= msg.length)
                 if (msg.length == c.length) {
-                    msg.map((line, index) => {
+                    msg = msg.map((line, index) => {
                         t.push(findColor(line, c[index]));
                     })
                 } else {
@@ -85,11 +68,13 @@ const logArray = (msg, color, bgColor) => {
         }
         return t;
     };
-    msg = color ? checkColorsArray(color) : checkColorsArray(['white', 'gray']);
-    msg = bgColor ? checkColorsArray(bgColor) : checkColorsArray(['bgGray', 'bgWhite']);
+    msg = color ? checkColorsArray(color) : checkColorsArray(['white']);
+    msg = bgColor ? checkColorsArray(bgColor) : checkColorsArray(['bgGray']);
 
 
-    msg.forEach(line => {
+    msg.forEach((line, index) => {
+        if (index === 0) line = '\n'+line;
+        if (index === msg.length - 1) line += '\n';
         console.log(line);
     })
 
@@ -121,16 +106,40 @@ class Logger {
     }
 
     warn = (msg) => {
-        msg = colors.bgWhite(colors.red(msg));
+        msg = colors.bgWhite(colors.magenta(msg));
         console.warn(msg);
     }
 
     error = (msg) => {
-        msg = colors.bgYellow(colors.red(msg));
+        msg = colors.bgBrightYellow(colors.brightRed(msg));
         console.error(msg);
+    }
+
+
+    welcome = () => {
+
+        // log is the most robust function logger has and using it in your js is as easy as
+        this.log("Hi there! I'm Logger!", 'brightYellow');
+        // this will print 'Hi There! I'm logger!' with yellow text and a green background
+
+        this.info('I log info [ info(message) ] messages to have a grey background and white text!');
+
+        this.warn('I log warn [ warn(message) ] messages to have a white background and magenta text!');
+
+        this.error('I log error [ error(message) ] messages to have a yellow background and red text!');
+
+
+        this.log(['I hope I can make debugging CLI a little easier!',
+            'To install, run [npm install @frenzie24/logger] in your project root',
+            'in the file you need logger add:', 
+            'const {log, info, warn, error} = require(\'@frenzie24/logger\')',
+            'start logging with white text and a gray background by:',
+            `log('hello world!', 'white', 'bgGray');`,
+            '\nHappy logging!'], ['white', 'blue', 'blue', 'blue', 'blue', 'blue', 'magenta'], ['bgBlue', 'bgWhite', 'bgWhite', 'bgWhite','bgWhite', 'bgWhite', 'bgBlack']);
+
     }
 }
 
-
+let test = new Logger(); test.welcome();
 
 module.exports = new Logger();
