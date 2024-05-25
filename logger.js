@@ -62,22 +62,22 @@ const welcome = () => {
 
 }
 
-const logArray =  (msg, color, bgColor) => {
+const logArray = (msg, color, bgColor) => {
 
     // always check for text color first
-    checkColorsArray =  (c) => {
+    checkColorsArray = (c) => {
         let t = [];
         if (Array.isArray(c)) {
-
-            if (msg.length == c.length) {
-                msg.map((line, index) => {
-                    t.push(findColor(line, c[index]));
-                })
-            } else {
-                msg.map((line, index) => {
-                    t.push(findColor(line, c[index % c.length]));
-                })
-            }
+            if (c.length <= msg.length)
+                if (msg.length == c.length) {
+                    msg.map((line, index) => {
+                        t.push(findColor(line, c[index]));
+                    })
+                } else {
+                    msg.map((line, index) => {
+                        t.push(findColor(line, c[index % c.length]));
+                    })
+                }
         } else {
             msg.map(line => {
                 t.push(findColor(line, c));
@@ -85,24 +85,24 @@ const logArray =  (msg, color, bgColor) => {
         }
         return t;
     };
-    msg = color ?  checkColorsArray(color) :  checkColorsArray(['white', 'black']);
-    msg = bgColor ?  checkColorsArray(bgColor) :  checkColorsArray(['bgGray', 'bgWhite' ]);
-   
+    msg = color ? checkColorsArray(color) : checkColorsArray(['white', 'gray']);
+    msg = bgColor ? checkColorsArray(bgColor) : checkColorsArray(['bgGray', 'bgWhite']);
+
 
     msg.forEach(line => {
         console.log(line);
     })
-  
+
 }
 
-class Logger  {
+class Logger {
     constructor() { }
 
-    log =  (msg, color, bgColor) => {
-      
+    log = (msg, color, bgColor) => {
+
         if (Array.isArray(msg)) {
-         
-             logArray(msg, color, bgColor)
+
+            logArray(msg, color, bgColor)
 
             return;
         }
