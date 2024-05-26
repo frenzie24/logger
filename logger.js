@@ -93,10 +93,24 @@ class Logger {
         }
         if (color) msg = findColor(msg, color);
         if (bgColor) msg = findColor(msg, bgColor);
-        console.log(msg)
+        console.log(findColor(findColor(msg, 'white'), 'bgBlack'));
     }
 
+    error = (msg) => {
+        msg = colors.bgBrightYellow(colors.brightRed(msg));
+        console.error(msg);
+    }
 
+    highlight=(msg, bgColor) => {
+        if(!bgColor) {
+            bgColor = 'bgBrightYellow';
+
+            console.log(findColor(findColor(msg, 'bgBrightYellow'), 'black'));
+        }
+        if(Array.isArray(msg)) {
+            logArray(msg, bgColor);
+        }
+    }
 
     info = (msg) => {
         msg = colors.bgGray(colors.white(msg));
@@ -110,10 +124,6 @@ class Logger {
         console.warn(msg);
     }
 
-    error = (msg) => {
-        msg = colors.bgBrightYellow(colors.brightRed(msg));
-        console.error(msg);
-    }
 
 
     help = () => {
