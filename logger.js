@@ -119,7 +119,7 @@ class Logger {
         msg = colors.bgGray(colors.white(msg));
         if (Array.isArray(msg)) {
             console.info(msg);
-        } else console.info('\n'+msg+'\n'
+        } else console.info('\n'+msg+'\n')
     }
 
     warn = (msg) => {
@@ -161,5 +161,5 @@ class Logger {
     }
 }
 
-
+new Logger().help;
 module.exports = new Logger();
