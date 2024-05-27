@@ -124,7 +124,7 @@ class Logger {
 
     warn = (msg) => {
         msg = colors.bgWhite(colors.magenta(msg));
-        console.warn('\n'+msg+'\n';
+        console.warn('\n'+msg+'\n');
     }
 
     setTextColor = (color) => {
