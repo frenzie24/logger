@@ -48,23 +48,27 @@ function findColor(msg, color) {
 const logArray = (msg, color, bgColor) => {
 
     // always check for text color first
+    let separatorLength = 10;
+    separator = findColor(separator, bgColor ? Array.isArray(bgColor) ? bgColor[0] : bgColor : color ?  Array.isArray(color) ? color[0] : color : '');
     checkColorsArray = (c) => {
-        this.color = 'white';
-        this.bgColor = 'bgGray'
+
         let t = [];
         if (Array.isArray(c)) {
-            if (c.length <= msg.length)
+           // if (c.length <= msg.length)
                 if (msg.length == c.length) {
                     msg = msg.map((line, index) => {
+                        line.length > separatorLength ? separatorLength = line.length : -1;
                         t.push(findColor(line, c[index]));
                     })
                 } else {
                     msg.map((line, index) => {
+                        line.length > separatorLength ? separatorLength = line.length : -1;
                         t.push(findColor(line, c[index % c.length]));
                     })
                 }
         } else {
             msg.map(line => {
+                line.length > separatorLength ? separatorLength = line.length : -1;
                 t.push(findColor(line, c));
             })
         }
@@ -75,65 +79,87 @@ const logArray = (msg, color, bgColor) => {
 
 
     msg.forEach((line, index) => {
-        if (index === 0) line = '\n' + line;
-        if (index === msg.length - 1) line += '\n';
+        if (index === 0) line = `${separator.repeat(separatorLength)}\n${line}`;
+        if (index === msg.length - 1) line = `${line}\n${separator.repeat(separatorLength)}`;
+       // process.stdout.write(line+'\n')
         console.log(line);
     })
 
 }
 
+let separator = `=`;
 class Logger {
-    constructor() { }
+    #color;
+    #bgColor;
+    constructor() {
 
+        this.#color = 'brightYellow';
+        this.#bgColor = 'bgBlack';
+
+    }
     log = (msg, color, bgColor) => {
-       
+
         if (Array.isArray(msg)) {
 
-            logArray(msg, color, bgColor)
+            logArray(msg, color ? color: this.#color, bgColor ? bgColor : this.#bgColor)
 
             return;
         }
-        if (color) msg = findColor(msg, color); else msg = findColor(msg, this.color);
-        if (bgColor) msg = findColor(msg, bgColor); else msg = findColor(msg, this.colbgColor);
+        if (color) msg = findColor(msg, this.#color); else msg = findColor(msg, this.#color);
+        if (bgColor) msg = findColor(msg, this.#bgColor); else msg = findColor(msg, this.#bgColor);
         console.log(findColor(findColor(msg, 'yellow'), 'bgBlack'));
+        return this;
     }
 
     error = (msg) => {
-         
+
+        let sep = findColor(findColor('▓', 'brightRed'), 'bgBrightYellow');
         if (Array.isArray(msg)) {
             logArray(msg, 'brightRed', 'bgBrightYellow');
         }
+        sep = sep.repeat(msg.length);
         msg = colors.bgBrightYellow(colors.brightRed(msg));
-        console.error('\n'+msg+'\n');
+        console.error(sep + '\n' + msg + '\n' + sep);
+        return this;
     }
 
     highlight = (msg) => {
-       
+
         if (Array.isArray(msg)) {
             logArray(msg, 'black', 'bgBrightYellow');
         }
         console.log(findColor(findColor(msg, 'black'), 'bgBrightYellow'));
+        return this;
     }
 
     info = (msg) => {
-        msg = colors.bgGray(colors.white(msg));
+        
+        let sep = findColor(findColor('░', 'white'), 'bgGray');
+        sep = sep.repeat(msg.length);
+        msg = colors.bgGray(colors.white(sep + '\n' + msg + '\n' + sep));
         if (Array.isArray(msg)) {
             console.info(msg);
-        } else console.info('\n'+msg+'\n')
+        } else console.info('\n' + msg + '\n')
+        return this;
     }
 
     warn = (msg) => {
-        msg = colors.bgWhite(colors.magenta(msg));
-        console.warn('\n'+msg+'\n');
+        let sep = findColor(findColor('▒', 'magenta'), 'bgWhtie');
+        sep = sep.repeat(msg.length);
+        msg = colors.bgWhite(colors.magenta(sep + '\n' + msg + '\n' + sep));
+        console.warn('\n' + msg + '\n');
+        return this;
     }
 
-    setTextColor = (color) => {
-        this.color = color;
+    setTheme = (color, bgColor) => {
+        color ? color.includes('bg') ? this.#bgColor = color : this.#color = color : -1;
+        bgColor ? this.#bgColor = bgColor : -1;
+        return this;
+        //        this.#color = color ? color : this.#color;
+
     }
 
-    setBGColor = (bgColor) => {
-        this.bgColor =bgColor;
-    }
+
 
 
     help = () => {
@@ -148,7 +174,7 @@ class Logger {
 
         this.error('I log error [ error(message) ] messages to have a yellow background and red text!');
 
-        this.highlight('I can add a bright yellow background and convert your text to black to simulate highlighting with highlight(msg)')
+        this.highlight('\nI can add a bright yellow background and convert your text to black to simulate highlighting with highlight(msg)\n')
 
         this.log(['I hope I can make debugging CLI a little easier!',
             'To install, run [npm install @frenzie24/logger] in your project root',
@@ -156,10 +182,13 @@ class Logger {
             'const {log, info, warn, error} = require(\'@frenzie24/logger\')',
             'start logging with white text and a gray background by:',
             `log('hello world!', 'white', 'bgGray');`,
-            '\nHappy logging!'], ['white', 'blue', 'blue', 'blue', 'blue', 'blue', 'magenta'], ['bgBlue', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite', 'bgBlack']);
+            ], ['white', 'blue', 'blue', 'blue', 'blue', 'blue', 'magenta'], ['bgBlue', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite','bgWhite', 'bgBlack', 'bgWhite','bgWhite', 'bgBlack', 'bgWhite','bgWhite', 'bgBlack']);
 
+            this.log('Happy Logging!')
+ 
     }
 }
 
-new Logger().help;
+new Logger().help();
+new Logger().setTheme('green', 'brightYellow').help();
 module.exports = new Logger();
