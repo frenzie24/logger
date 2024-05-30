@@ -46,7 +46,7 @@ function findColor(msg, color) {
 
 
 const logArray = (msg, color, bgColor) => {
-
+    let separator = `=`;
     // always check for text color first
     let separatorLength = 10;
     separator = findColor(separator, bgColor ? Array.isArray(bgColor) ? bgColor[0] : bgColor : color ?  Array.isArray(color) ? color[0] : color : '');
@@ -87,7 +87,7 @@ const logArray = (msg, color, bgColor) => {
 
 }
 
-let separator = `=`;
+
 class Logger {
     #color;
     #bgColor;
