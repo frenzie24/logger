@@ -48,27 +48,27 @@ function findColor(msg, color) {
 const logArray = (msg, color, bgColor) => {
     let separator = `=`;
     // always check for text color first
-    let separatorLength = 10;
-    separator = findColor(separator, bgColor ? Array.isArray(bgColor) ? bgColor[0] : bgColor : color ?  Array.isArray(color) ? color[0] : color : '');
+    let separatorLength = process.stdout.columns - 1;
+    separator = findColor(separator, bgColor ? Array.isArray(bgColor) ? bgColor[0] : bgColor : color ? Array.isArray(color) ? color[0] : color : '');
     checkColorsArray = (c) => {
 
         let t = [];
         if (Array.isArray(c)) {
-           // if (c.length <= msg.length)
-                if (msg.length == c.length) {
-                    msg = msg.map((line, index) => {
-                        line.length > separatorLength ? separatorLength = line.length : -1;
-                        t.push(findColor(line, c[index]));
-                    })
-                } else {
-                    msg.map((line, index) => {
-                        line.length > separatorLength ? separatorLength = line.length : -1;
-                        t.push(findColor(line, c[index % c.length]));
-                    })
-                }
+            // if (c.length <= msg.length)
+            if (msg.length == c.length) {
+                msg = msg.map((line, index) => {
+                    //   line.length > separatorLength ? separatorLength = line.length : -1;
+                    t.push(findColor(line, c[index]));
+                })
+            } else {
+                msg.map((line, index) => {
+                    //   line.length > separatorLength ? separatorLength = line.length : -1;
+                    t.push(findColor(line, c[index % c.length]));
+                })
+            }
         } else {
             msg.map(line => {
-                line.length > separatorLength ? separatorLength = line.length : -1;
+                //    line.length > separatorLength ? separatorLength = line.length : -1;
                 t.push(findColor(line, c));
             })
         }
@@ -77,11 +77,10 @@ const logArray = (msg, color, bgColor) => {
     msg = color ? checkColorsArray(color) : checkColorsArray(['white']);
     msg = bgColor ? checkColorsArray(bgColor) : checkColorsArray(['bgGray']);
 
-
     msg.forEach((line, index) => {
         if (index === 0) line = `${separator.repeat(separatorLength)}\n${line}`;
         if (index === msg.length - 1) line = `${line}\n${separator.repeat(separatorLength)}`;
-       // process.stdout.write(line+'\n')
+        // process.stdout.write(line+'\n')
         console.log(line);
     })
 
@@ -101,7 +100,7 @@ class Logger {
 
         if (Array.isArray(msg)) {
 
-            logArray(msg, color ? color: this.#color, bgColor ? bgColor : this.#bgColor)
+            logArray(msg, color ? color : this.#color, bgColor ? bgColor : this.#bgColor)
 
             return;
         }
@@ -113,11 +112,14 @@ class Logger {
 
     error = (msg) => {
 
-        let sep = findColor(findColor('▓', 'brightRed'), 'bgBrightYellow');
+        let sep = findColor(findColor('█', 'brightRed'), 'bgBrightYellow');
+
+        let sepB = findColor(findColor('▀', 'brightRed'), 'bgBrightYellow');
         if (Array.isArray(msg)) {
             logArray(msg, 'brightRed', 'bgBrightYellow');
         }
-        sep = sep.repeat(msg.length);
+        sep = sep.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
+        sepB = sepB.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
         msg = colors.bgBrightYellow(colors.brightRed(msg));
         console.error(sep + '\n' + msg + '\n' + sep);
         return this;
@@ -133,10 +135,13 @@ class Logger {
     }
 
     info = (msg) => {
-        
-        let sep = findColor(findColor('░', 'white'), 'bgGray');
-        sep = sep.repeat(msg.length);
-        msg = colors.bgGray(colors.white(sep + '\n' + msg + '\n' + sep));
+
+        let sep = findColor(findColor('▄', 'white'), 'bgBlack');
+        let sepB = findColor(findColor('▀', 'white'), 'bgBlack');
+
+        sep = sep.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
+        sepB = sepB.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
+        msg = colors.bgGray(colors.white(sep + '\n' + msg + '\n' + sepB));
         if (Array.isArray(msg)) {
             console.info(msg);
         } else console.info('\n' + msg + '\n')
@@ -144,9 +149,11 @@ class Logger {
     }
 
     warn = (msg) => {
-        let sep = findColor(findColor('▒', 'magenta'), 'bgWhtie');
-        sep = sep.repeat(msg.length);
-        msg = colors.bgWhite(colors.magenta(sep + '\n' + msg + '\n' + sep));
+        let sep = findColor(findColor('▄', 'magenta'), 'bgBlack');
+        let sepB = findColor(findColor('▀', 'magenta'), 'bgBlack');
+        sep = sep.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
+        sepB = sepB.repeat(msg.length > process.stdout.columns ? process.stdout.columns : msg.length);
+        msg = colors.bgWhite(colors.magenta(sep + '\n' + msg + '\n' + sepB));
         console.warn('\n' + msg + '\n');
         return this;
     }
@@ -182,13 +189,13 @@ class Logger {
             'const {log, info, warn, error} = require(\'@frenzie24/logger\')',
             'start logging with white text and a gray background by:',
             `log('hello world!', 'white', 'bgGray');`,
-            ], ['white', 'blue', 'blue', 'blue', 'blue', 'blue', 'magenta'], ['bgBlue', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite','bgWhite', 'bgBlack', 'bgWhite','bgWhite', 'bgBlack', 'bgWhite','bgWhite', 'bgBlack']);
+        ], ['white', 'blue', 'blue', 'blue', 'blue', 'blue', 'magenta'], ['bgBlue', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite', 'bgWhite', 'bgBlack', 'bgWhite', 'bgWhite', 'bgBlack', 'bgWhite', 'bgWhite', 'bgBlack']);
 
-            this.log('Happy Logging!')
- 
+        this.log('Happy Logging!')
+        return this;
+
     }
 }
 
-new Logger().help();
-new Logger().setTheme('green', 'brightYellow').help();
+new Logger().setTheme('green', 'brightYellow').help().setTheme('blue', 'bgWhite').log('Yo hey!');
 module.exports = new Logger();
