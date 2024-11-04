@@ -197,5 +197,4 @@ class Logger {
     }
 }
 
-new Logger().setTheme('green', 'brightYellow').help().setTheme('blue', 'bgWhite').log('Yo hey!');
 module.exports = new Logger();
