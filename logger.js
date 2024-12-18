@@ -37,7 +37,6 @@ function findColor(msg, color) {
         case `bgBrightMagenta`: return colors.bgBrightMagenta(msg);
         case `bgBrightCyan`: return colors.bgBrightCyan(msg);
         case `bgBrightWhite`: return colors.bgBrightWhite(msg);
-
         default: return msg;
     }
 }
@@ -54,7 +53,7 @@ const logArray = (msg, color, bgColor) => {
 
         let t = [];
         if (Array.isArray(c)) {
-            // if (c.length <= msg.length)
+
             if (msg.length == c.length) {
                 msg = msg.map((line, index) => {
                     //   line.length > separatorLength ? separatorLength = line.length : -1;
@@ -80,8 +79,8 @@ const logArray = (msg, color, bgColor) => {
     msg.forEach((line, index) => {
         if (index === 0) line = `${separator.repeat(separatorLength)}\n${line}`;
         if (index === msg.length - 1) line = `${line}\n${separator.repeat(separatorLength)}`;
-        // process.stdout.write(line+'\n')
-        console.log(line);
+         process.stdout.write(line+'\n')
+        //console.log(line);
     })
 
 }
