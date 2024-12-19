@@ -1,7 +1,7 @@
 //pretty console logs, less typing
 // Charles Gross
 
-const { printLog, printError, printInfo, printWarn} = require('./util/globals');
+const { printLog, printError, printInfo, printWarn} = require('./util');
 
 class Logger {
 

@@ -79,7 +79,7 @@ const findColor = (msg, color) => {
 
 //#region class GLOBALS {
 
-class GLOBALS {
+class util {
     // consts
     #cols = process.stdout.columns - 1;
     #sepLength = process.stdout.columns / 2;
@@ -305,4 +305,4 @@ const GLOBALS = () => {
 }
     */
 
-module.exports = new GLOBALS();
+module.exports = new util();
