@@ -88,5 +88,5 @@ class Logger {
         }
     }
 }
-
+const logget = new Logger().help();
 module.exports = new Logger();

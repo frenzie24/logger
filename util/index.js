@@ -79,7 +79,7 @@ const findColor = (msg, color) => {
 
 //#region class GLOBALS {
 
-class util {
+class GLOBALS {
     // consts
     #cols = process.stdout.columns - 1;
     #sepLength = process.stdout.columns / 2;
@@ -94,6 +94,10 @@ class util {
     // FUNCTIONS
     #compareLength = (length) => {
         return length > this.#sepLength ? length : this.#sepLength;
+    }
+
+    colorLine = (line, color, bgColor) => {
+        return findColor(findColor(line, color), bgColor);
     }
 
     // reuturns formatted type after validating the val is printable. forced to a random
@@ -305,4 +309,4 @@ const GLOBALS = () => {
 }
     */
 
-module.exports = new util();
+module.exports = new GLOBALS();
